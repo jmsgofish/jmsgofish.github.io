@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './main.js',
+    entry: ['@babel/polyfill', './main.js'],
     output: {
         path: path.join(__dirname, '/bundle'),
         filename: 'index_bundle.js'
@@ -18,7 +18,7 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['es2015', 'react']
+                    presets: ['@babel/preset-env', '@babel/preset-react']
                 }
             }
         ]

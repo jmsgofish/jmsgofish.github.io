@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import WSTest from './WSTest.js';
+
 class App extends Component {
     render() {
         return (
             <div>
-                <h1>code here1</h1>
-                <Home />
+                <WSTest />
             </div>
         );
     }
 }
+
 export default App;

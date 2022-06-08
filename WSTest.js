@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 
-export class Home extends Component {
+export class WSTest extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            connection: "no"
+            connection: 'no'
         };
+
+        this.connectToPump.bind(this);
     }
 
-    static displayName = Home.name;
+    // static displayName = WSTest.name;
 
     // Pair pump
     // onConnect event
@@ -19,14 +21,14 @@ export class Home extends Component {
     // how to validate correct pump?
     // how to handle 
 
-    onPumpConnect(event) {
+    onPumpConnect = (event) => {
         var port = event.target
         this.setState({ connection: "connected" });
         console.log(port);
         console.log('connect');
     }
 
-    onPumpDisconnect(event) {
+    onPumpDisconnect = (event) => {
         var port = event.target
         this.setState({connection: "disconnected"});
         console.log(port);
@@ -52,6 +54,7 @@ export class Home extends Component {
                         while (true) {
                             const res = await reader.read();
                             console.log(res);
+
                             if (res.done) {
                                 // Allow the serial port to be closed later.
                                 reader.releaseLock();
@@ -70,23 +73,29 @@ export class Home extends Component {
             })
     }
 
-    async connectToPump() {
-        await navigator.serial.requestPort({ filters: [{ usbVendorId: 0x0483, },], });
+    connectToPump = () => {
+        navigator.serial.requestPort({ filters: [{ usbVendorId: 0x0483, },], });
         this.setState({ connection: "yes" });
     }
 
     render() {
-        //navigator.serial.addEventListener('connect', this.onPumpConnect);
-        //navigator.serial.addEventListener('disconnect', this.onPumpDisconnect);
 
-    return (
-        <div>
-            <h1 onClick={this.connectToPump}>Connect to pump</h1>
-            <h1 onClick={this.onTest}>Send test data</h1>
-            <h1>{this.state.connection}</h1>
-            <h1>serial:{navigator.serial ? "yes" : "no"}</h1>
-            <h1>usb:{navigator.usb ? "yes" : "no"}</h1>
-        </div>
-    );
-  }
+        navigator.serial.addEventListener('connect', this.onPumpConnect);
+        navigator.serial.addEventListener('disconnect', this.onPumpDisconnect);
+
+        return (
+            <div>
+                <h1 onClick={this.connectToPump}>Connect to pump</h1>
+                <h1 onClick={this.onTest}>Send test data</h1>
+                <h1>Pump connected: {this.state.connection}</h1>
+                <h3>WebSerial Support:{navigator.serial ? "yes" : "no"}</h3>
+                <h3>WebUSB Support:{navigator.usb ? "yes" : "no"}</h3>
+            </div>
+        );
+    }
 }
+
+export default WSTest;
+
+
+
